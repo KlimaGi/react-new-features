@@ -33,12 +33,8 @@ const NoteApp = () => {
   return (
     <div>
       <h2>Notes</h2>
-      {notes.map((note) => (
-        <div key={note.title}>
-          <h3>{note.title}</h3>
-          <p>{note.body}</p>
-          <button onClick={() => removeNote(note.title)}>x</button>
-        </div>
+      {notes.map((note, index) => (
+        <Note key={index + note.title} note={note} removeNote={removeNote} />
       ))}
       <p>Add note</p>
       <form onSubmit={addNote}>
@@ -50,47 +46,22 @@ const NoteApp = () => {
   );
 };
 
-const App = (props) => {
-  const [count, setCount] = useState(props.count);
-  const [text, setText] = useState("");
-
-  const increment = () => {
-    setCount(count + 1);
-  };
-  const decrement = () => {
-    setCount(count - 1);
-  };
-  const reset = () => {
-    setCount(props.count);
-  };
-  const changeText = (e) => {
-    setText(e.target.value);
-  };
-
+const Note = ({ note, removeNote }) => {
   useEffect(() => {
-    console.log("This should only run once!");
+    console.log("setting up effect!");
+
+    return () => {
+      console.log("Cleaning up effect!");
+    };
   }, []);
-
-  useEffect(() => {
-    console.log("useEffect ran");
-    document.title = count;
-  }, [count]);
 
   return (
     <div>
-      <p>
-        The current {text || "count"} is {count}
-      </p>
-      <button onClick={increment}>+1</button>
-      <button onClick={reset}>reset</button>
-      <button onClick={decrement}>-1</button>
-      <input value={text} onChange={changeText} />
+      <h3>{note.title}</h3>
+      <p>{note.body}</p>
+      <button onClick={() => removeNote(note.title)}>x</button>
     </div>
   );
-};
-
-App.defaultProps = {
-  count: 0,
 };
 
 ReactDOM.render(<NoteApp />, document.getElementById("root"));
